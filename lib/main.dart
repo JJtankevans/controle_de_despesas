@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:expenses/components/chart.dart';
 import 'package:expenses/components/transaction_form.dart';
 import 'package:expenses/components/transaction_list.dart';
 import 'package:expenses/model/transaction.dart';
@@ -24,7 +25,7 @@ class ExpensesApp extends StatelessWidget {
             fontFamily: "OpenSans",
             fontSize: 20,
             fontWeight: FontWeight.bold,
-            )
+          ),
         ),
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.amber,
@@ -36,7 +37,8 @@ class ExpensesApp extends StatelessWidget {
           titleLarge: TextStyle(
             fontFamily: "OpenSans",
             fontSize: 18,
-            fontWeight: FontWeight.bold,)
+            fontWeight: FontWeight.bold,
+          ),
         ),
         useMaterial3: false,
       ),
@@ -53,19 +55,33 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final List<Transaction> _transactions = [
-    // Transaction(
-    //   id: "t1",
-    //   title: "Novo tênis de corrida",
-    //   value: 310.76,
-    //   date: DateTime.now(),
-    // ),
-    // Transaction(
-    //   id: "t2",
-    //   title: "Conta de luz",
-    //   value: 211.30,
-    //   date: DateTime.now(),
-    // ),
+    Transaction(
+      id: "t0",
+      title: "Conta antiga",
+      value: 400.00,
+      date: DateTime.now().subtract(Duration(days: 33)),
+    ),
+    Transaction(
+      id: "t1",
+      title: "Novo tênis de corrida",
+      value: 310.76,
+      date: DateTime.now().subtract(Duration(days: 3)),
+    ),
+    Transaction(
+      id: "t2",
+      title: "Conta de luz",
+      value: 211.30,
+      date: DateTime.now().subtract(Duration(days: 4)),
+    ),
   ];
+
+  List<Transaction> get _recentTransactions {
+    return _transactions.where((tr) {
+      return tr.date.isAfter(DateTime.now().subtract(
+        Duration(days: 7),
+      ));
+    }).toList();
+  }
 
   void _openTransactionFormModal(BuildContext context) {
     showModalBottomSheet(
@@ -107,13 +123,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Container(
-              child: Card(
-                elevation: 5,
-                color: Colors.blue,
-                child: Text('Gráfico'),
-              ),
-            ),
+            Chart(recentTransaction: _recentTransactions),
             TransactionList(transactions: _transactions),
           ],
         ),
