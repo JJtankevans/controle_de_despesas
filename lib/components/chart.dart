@@ -2,7 +2,6 @@ import 'package:expenses/components/chart_bar.dart';
 import 'package:expenses/model/transaction.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'chart_bar.dart';
 
 class Chart extends StatelessWidget {
   const Chart({required this.recentTransaction, super.key});
