@@ -3,14 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class TransactionList extends StatelessWidget {
-  const TransactionList({required this.transactions, super.key});
+  const TransactionList({
+    required this.transactions,
+    required this.onDelete,
+    super.key,
+  });
 
   final List<Transaction> transactions;
-
+  final void Function(String) onDelete;
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 400,
+      height: 530,
       child:
           transactions.isEmpty
               ? Column(
@@ -59,7 +63,7 @@ class TransactionList extends StatelessWidget {
                         style: TextStyle(color: Colors.grey),
                       ),
                       trailing: IconButton(
-                        onPressed: () {},
+                        onPressed: () => onDelete(tr.id),
                         icon: Icon(Icons.delete),
                         color: Theme.of(context).colorScheme.error,
                       ),
