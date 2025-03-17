@@ -97,6 +97,8 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     //permiter que o texto aumente de acordo com o que foi selecionado pelo usuario
     double scaleFactor = MediaQuery.of(context).textScaler.scale(1.0);
+    bool isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
 
     final appBar = AppBar(
       title: Text(
@@ -104,6 +106,16 @@ class _MyHomePageState extends State<MyHomePage> {
         style: TextStyle(fontSize: 20 * scaleFactor),
       ),
       actions: [
+        if (isLandscape)
+          IconButton(
+            icon: Icon(_showChart ? Icons.list : Icons.show_chart),
+            onPressed:
+                () => {
+                  setState(() {
+                    _showChart = !_showChart;
+                  }),
+                },
+          ),
         IconButton(
           icon: Icon(Icons.add),
           onPressed: () => _openTransactionFormModal(context),
@@ -122,32 +134,19 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text("Exibir Fráfico"),
-                Switch(
-                  value: _showChart,
-                  onChanged: (value) {
-                    setState(() {
-                      _showChart = value;
-                    });
-                  },
+            if (_showChart || !isLandscape)
+              Container(
+                height: availableHeight * (isLandscape ? 0.7 : 0.3),
+                child: Chart(recentTransaction: _recentTransactions),
+              ),
+            if (!_showChart || !isLandscape)
+              Container(
+                height: availableHeight * 0.7,
+                child: TransactionList(
+                  transactions: _transactions,
+                  onDelete: _deleteTransaction,
                 ),
-              ],
-            ),
-            _showChart == true
-                ? Container(
-                  height: availableHeight * 0.3,
-                  child: Chart(recentTransaction: _recentTransactions),
-                )
-                : Container(
-                  height: availableHeight * 0.7,
-                  child: TransactionList(
-                    transactions: _transactions,
-                    onDelete: _deleteTransaction,
-                  ),
-                ),
+              ),
           ],
         ),
       ),
