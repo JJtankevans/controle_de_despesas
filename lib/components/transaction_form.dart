@@ -48,60 +48,62 @@ class _TransactionFormState extends State<TransactionForm> {
     final mediaQuery = MediaQuery.of(context);
     bool isLandscape = mediaQuery.orientation == Orientation.landscape;
 
-    return SingleChildScrollView(
-      child: Card(
-        elevation: 5,
-        child: Padding(
-          padding: EdgeInsets.only(
-            top: 10,
-            right: 10,
-            left: 10,
-            bottom: 10 + mediaQuery.viewInsets.bottom,
-          ),
-          child: Column(
-            children: [
-              TextField(
-                decoration: InputDecoration(labelText: "Título"),
-                controller: _titleController,
-                onSubmitted: (_) => _submitForm(),
-              ),
-              TextField(
-                decoration: InputDecoration(labelText: "Valor (R\$)"),
-                controller: _valueController,
-                onSubmitted: (_) => _submitForm(),
-                keyboardType: TextInputType.numberWithOptions(decimal: true),
-              ),
-              Container(
-                height: !isLandscape ? 70 : 40,
-                child: Row(
+    return SafeArea(
+      child: SingleChildScrollView(
+        child: Card(
+          elevation: 5,
+          child: Padding(
+            padding: EdgeInsets.only(
+              top: 10,
+              right: 10,
+              left: 10,
+              bottom: 10 + mediaQuery.viewInsets.bottom,
+            ),
+            child: Column(
+              children: [
+                TextField(
+                  decoration: InputDecoration(labelText: "Título"),
+                  controller: _titleController,
+                  onSubmitted: (_) => _submitForm(),
+                ),
+                TextField(
+                  decoration: InputDecoration(labelText: "Valor (R\$)"),
+                  controller: _valueController,
+                  onSubmitted: (_) => _submitForm(),
+                  keyboardType: TextInputType.numberWithOptions(decimal: true),
+                ),
+                Container(
+                  height: !isLandscape ? 70 : 40,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          _selectedDate == null
+                              ? "Nenhuma data selecionada!"
+                              : "Data selecionada: ${DateFormat("dd/MM/y").format(_selectedDate!)}",
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: _showDatePicker,
+                        child: Text(
+                          "Selecionar data",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Expanded(
-                      child: Text(
-                        _selectedDate == null
-                            ? "Nenhuma data selecionada!"
-                            : "Data selecionada: ${DateFormat("dd/MM/y").format(_selectedDate!)}",
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: _showDatePicker,
-                      child: Text(
-                        "Selecionar data",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
+                    ElevatedButton(
+                      onPressed: _submitForm,
+                      child: Text("Nova Transação"),
                     ),
                   ],
                 ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  ElevatedButton(
-                    onPressed: _submitForm,
-                    child: Text("Nova Transação"),
-                  ),
-                ],
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
