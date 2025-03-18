@@ -45,8 +45,8 @@ class _TransactionFormState extends State<TransactionForm> {
 
   @override
   Widget build(BuildContext context) {
-    bool isLandscape =
-        MediaQuery.of(context).orientation == Orientation.landscape;
+    final mediaQuery = MediaQuery.of(context);
+    bool isLandscape = mediaQuery.orientation == Orientation.landscape;
 
     return SingleChildScrollView(
       child: Card(
@@ -56,7 +56,7 @@ class _TransactionFormState extends State<TransactionForm> {
             top: 10,
             right: 10,
             left: 10,
-            bottom: 10 + MediaQuery.of(context).viewInsets.bottom,
+            bottom: 10 + mediaQuery.viewInsets.bottom,
           ),
           child: Column(
             children: [

@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:expenses/components/chart.dart';
@@ -95,10 +96,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
     //permiter que o texto aumente de acordo com o que foi selecionado pelo usuario
-    double scaleFactor = MediaQuery.of(context).textScaler.scale(1.0);
-    bool isLandscape =
-        MediaQuery.of(context).orientation == Orientation.landscape;
+    double scaleFactor = mediaQuery.textScaler.scale(1.0);
+    bool isLandscape = mediaQuery.orientation == Orientation.landscape;
 
     final appBar = AppBar(
       title: Text(
@@ -124,9 +125,9 @@ class _MyHomePageState extends State<MyHomePage> {
     );
 
     final availableHeight =
-        MediaQuery.of(context).size.height -
+        mediaQuery.size.height -
         appBar.preferredSize.height -
-        MediaQuery.of(context).padding.top;
+        mediaQuery.padding.top;
 
     return Scaffold(
       appBar: appBar,
@@ -134,6 +135,22 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            // if (isLandscape)
+            //   Row(
+            //     mainAxisAlignment: MainAxisAlignment.center,
+            //     children: [
+            //       Text("Exibir Grafico"),
+            //       Switch.adaptive(
+            //         activeColor: Theme.of(context).colorScheme.secondary,
+            //         value: _showChart,
+            //         onChanged: (value) {
+            //           setState(() {
+            //             _showChart = value;
+            //           });
+            //         },
+            //       ),
+            //     ],
+            //   ),
             if (_showChart || !isLandscape)
               Container(
                 height: availableHeight * (isLandscape ? 0.7 : 0.3),
@@ -141,7 +158,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             if (!_showChart || !isLandscape)
               Container(
-                height: availableHeight * 0.7,
+                height: availableHeight * 1.0,
                 child: TransactionList(
                   transactions: _transactions,
                   onDelete: _deleteTransaction,
@@ -150,10 +167,13 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () => _openTransactionFormModal(context),
-      ),
+      floatingActionButton:
+          Platform.isIOS
+              ? Container()
+              : FloatingActionButton(
+                child: Icon(Icons.add),
+                onPressed: () => _openTransactionFormModal(context),
+              ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
