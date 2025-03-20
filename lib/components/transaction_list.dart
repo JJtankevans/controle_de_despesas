@@ -45,7 +45,11 @@ class TransactionList extends StatelessWidget {
             final tr = transactions[index];
             return LayoutBuilder(
               builder: (context, constraints) {
-                return TransactionItem(tr: tr, onDelete: onDelete);
+                return TransactionItem(
+                  key: GlobalObjectKey(tr),
+                  tr: tr,
+                  onDelete: onDelete,
+                );
               },
             );
           },
